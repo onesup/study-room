@@ -4,4 +4,6 @@ gem install nokogiri
 
 gem install rkelly-remix
 
+reserve.rb 의 쿠키를 최신화해줘야 작동합니다.
+
 > ruby find_room.rb

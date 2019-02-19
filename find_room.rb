@@ -3,8 +3,9 @@ require './place'
 require './reserve'
 
 class FindRoom
+  attr_reader :date
   def initialize()
-    date = '20190108'
+    @date = '20190219'
   end
 
   def find

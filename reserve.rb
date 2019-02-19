@@ -5,10 +5,11 @@ require 'rkelly'
 require 'json'
 
 class Reserve
-  attr_reader :room, :date
+  attr_reader :room, :date, :cookie
   def initialize(room, date=nil)
     @room = room
     @date = date
+    @cookie = "_ga=GA1.2.299807075.1542114254; _gid=GA1.2.1449767227.1550555584; NID_SES=AAABpA7/XiTsCVURizNrVXHSkFPpCWBfC3V/eVKtxapOamX+dCNjyZbMZ1A7MCryGsaGNlmUkbi1IA9x4nKUGSinFrY1CiEzsuPt8SW/i22u2aA6Sy4sYwCYOhoA5nSUh2zKjICFEun0FZkZpwIzaLGbLExdFaxmkWLQ1c/BPvkgyXB71u5xUUxpnMLudlpQsN+q+t/7go+871T3uCa9e0yrJXzYZvOIaBF0s87jct62CU4zOjvvfiRwIKJ02kJlYC59HAsqNdq6SWkF/H/1TkUcvorBILzPMT5xfLQ2LI2wFwHhiAvZmt2UloJiM7ESwAOCxozcdk4bBHa6M5IjFOJLMV1Q6NS+o2jVbzJijP9Y/31pVShblAnSl5npUEBPVMFrOXnM0PXc8DRoA8H3plPGDfVjGuftpwqRvSiyb2yKjyys9OWRI89r2I7pIG6BAaNDdkoy05qxCS/XZGBb7qGKbzb2cU0nsyoy9Y5AYuXVpM6BXApDFwZV6Plv0glmAfmXDXBz5Q8qeHb+lWDhn/jCM+PLqxw1bItUN/3pZ/IKnxxkCK1KTJ/8F5hyqj3c10jZqg==; NID_AUT=8HUpZB+uAcTVGqbMjvydgfmY8x+D7zHxUkl/gkuRW2t3h3mdbSGwV5e4IvjvZgIu; _gat_gtag_UA_123322100_1=1; wcs_bt=b942b9bd976724:1550556587"
   end
 
   def request
@@ -21,8 +22,7 @@ class Reserve
     request["User-Agent"] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"
     request["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"
     request["Accept-Language"] = "ko,en-US;q=0.9,en;q=0.8,ja;q=0.7,es;q=0.6"
-    request["Cookie"] = "_ga=GA1.2.299807075.1542114254; NID_AUT=RYGpv2cV89C4BcmJ1g5pMTt+w7FKgDmHxsvO++KiiOg0MWspevtrkRD3QZtIyUeq; _gid=GA1.2.1707587280.1546705342; NID_SES=AAABpcPfkcoCje8hVcG5BAYgrsrcX4uSZtXoVZ/xYghbsYhAf5LJTsq5/gzrdKp+tE8Hk+I6SakWgVrH/3qjs6gWIsNre6zNPWcgsbTIRDG3wrYGjpL+DItPo09UMJraTNWMmO4iFbkw78nqxQlYGm5qV42pr5EXarHZ9QKcLUxbFuxX9YS5VtUE7IlE2YPamPZUWj/j+06Ey1MDFpQa6u+d45uTb/NFmqY4+7FKP2Ms+X3X01h/w+6ESo8VdMzl5Nlx9d9qf7ZX04SYn5JA21XDPRWvwMdGo5fMc5VmJNGSYkuTlSVzNvnDm4RtMvTjYc7cllQqVn0IVhlW6a3IxPxH7XY1YQWDi6OZ3gKLglDG25tqqSgLcLBH2Sb6w69xzCB2hyK+mh0Bp8dOuNSB3Cs8X/DyJR3pjk1EVEY/HoWH/FDl+/m9e9ERF01RinrgcrNpAWT6pxrl1TC9MVVDXIHT+gz5XUrQyZG1TGLAxNPVFT8UwZVcBHIJD9R95DLa5kFQUi1wqZcwYDtV/tfjFoQccuEKe3XC3cxhXC65w6AF6P8Td1KQLNKyAoY2fijN3dQ/bA==; wcs_bt=b942b9bd976724:1546710498"
-
+    request["Cookie"] = cookie
     req_options = {
       use_ssl: uri.scheme == "https",
     }
@@ -69,8 +69,10 @@ class Reserve
   end
 
   def script
+    body = request.body
     doc = Nokogiri::HTML(request.body)
-    doc.css('script')[-1].text
+    result = doc.css('script')
+    result[-1].text
   end
 
   def parsed_script
